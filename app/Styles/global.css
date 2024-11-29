@@ -45,3 +45,18 @@ body {
 .modal-content button {
   margin-top: 20px;
 }
+.home-container {
+  text-align: center; /* Centers the content */
+  padding-top: 20px; /* Add some space at the top */
+}
+
+h1 {
+  font-weight: bold; /* Makes the text bold */
+  font-size: 2.5rem; /* Adjust the font size if needed */
+  margin-bottom: 20px; /* Adds some space below the heading */
+}
+
+.dashboard {
+  margin-top: -20px; /* "Rise" the Dashboard a little by reducing margin */
+  transition: margin-top 0.3s; /* Smooth transition if needed */
+}

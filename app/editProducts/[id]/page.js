@@ -1,19 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router"; // Correct import for router
+import { useRouter } from "next/navigation"; // Correct import for App Router
 import { getProduct, updateProduct } from "../../Services/productService"; // Adjust based on your service
-import { useRouter } from "next/router";
 
 export default function EditProduct() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const { query } = useRouter(); // Using query to get the dynamic `id`
-  const { id } = query; // Extract `id` from the URL
+  const { id } = query || {}; // Extract `id` from the query safely
 
   useEffect(() => {
     if (id) {
-      fetchProduct(id);
+      fetchProduct(id); // Only call if `id` is available
     }
   }, [id]);
 
@@ -28,7 +27,8 @@ export default function EditProduct() {
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = async (e) => {
+    e.preventDefault(); // Prevent form from reloading the page
     try {
       await updateProduct(id, product); // Update the product
       alert("Product updated successfully");

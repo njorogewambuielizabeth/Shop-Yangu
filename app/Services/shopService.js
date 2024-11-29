@@ -3,8 +3,19 @@
 // Function to get all shops
 export const getShops = async () => {
   try {
-    const response = await fetch("http://localhost:5000/shops"); // Replace with your actual API endpoint
+    const response = await fetch("http://localhost:5000/shops");
     if (!response.ok) throw new Error("Failed to fetch shops");
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// Function to get a shop by ID
+export const getShopById = async (id) => {
+  try {
+    const response = await fetch(`http://localhost:5000/shops/${id}`);
+    if (!response.ok) throw new Error(`Failed to fetch shop with ID: ${id}`);
     return await response.json();
   } catch (error) {
     console.error(error);

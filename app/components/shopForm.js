@@ -19,6 +19,12 @@ export default function ShopForm({ shop, onShopAdded, onClose }) {
     setSuccessMessage("");
     setErrorMessage("");
 
+    // Validate inputs
+    if (!shopName || !shopLocation) {
+      setErrorMessage("Both fields are required.");
+      return;
+    }
+
     const formData = { name: shopName, location: shopLocation };
 
     try {
@@ -34,10 +40,18 @@ export default function ShopForm({ shop, onShopAdded, onClose }) {
 
       onShopAdded(); // Callback to refresh the list
     } catch (error) {
-      setErrorMessage("Error submitting shop. Please try again.");
+      setErrorMessage(error?.message || "Error submitting shop. Please try again.");
     }
 
     onClose(); // Close form after submission
+  };
+
+  const handleClose = () => {
+    setShopName("");
+    setShopLocation("");
+    setSuccessMessage("");
+    setErrorMessage("");
+    onClose(); // Close the form when closing
   };
 
   return (
@@ -71,7 +85,7 @@ export default function ShopForm({ shop, onShopAdded, onClose }) {
             </button>
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               style={closeButtonStyle}
             >
               Close

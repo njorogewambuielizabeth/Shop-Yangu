@@ -1,19 +1,13 @@
 import React from 'react';
 import Dashboard from './components/ dashboard';
-// import Dashboard from "./components/dashboard";
-// import {Dashboard} from "./components/ dashboard.js";
-
-
 
 
 
 export default function Home() {
   return (
-    <div>
+    <div className='home-container'>
       <h1>Welcome to My Shop</h1>
       <Dashboard/>
-      
-      
       
     </div>
   );

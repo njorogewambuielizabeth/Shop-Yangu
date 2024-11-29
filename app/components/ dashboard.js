@@ -85,7 +85,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={dashboardStyle}>
       <h1>Dashboard</h1>
 
       {/* Card Section */}
@@ -108,17 +108,16 @@ export default function Dashboard() {
           <p style={cardTextStyle}>{totalStock}</p>
         </div>
       </div>
-           
-          {/* Centered View All Card with Red Background */}
-    <div style={centeredCardStyle}>
-      <h1 style={{ marginBottom: "5px" }}>View All</h1>
-      <div>
-        <a href="/manageShops" style={linkStyle}>View All Shops</a>
-        <br />
-        <a href="/manageProducts" style={linkStyle}>View All Products</a>
+
+      {/* Centered View All Card with Red Background */}
+      <div style={centeredCardStyle}>
+        <h1 style={{ marginBottom: "5px" }}>View All</h1>
+        <div>
+          <a href="/manageShops" style={linkStyle}>View All Shops</a>
+          <br />
+          <a href="/manageProducts" style={linkStyle}>View All Products</a>
+        </div>
       </div>
-    </div>
-    
 
       {/* Render the Bar Chart */}
       <div style={{ width: "600px", height: "400px", margin: "0 auto" }}>
@@ -202,6 +201,7 @@ const buttonStyle = {
   border: "none",
   cursor: "pointer",
 };
+
 const centeredCardStyle = {
   backgroundColor: "red", // Red background color
   color: "white",
@@ -219,10 +219,15 @@ const centeredCardStyle = {
   alignItems: "center",
 };
 
+// New style to lift the Dashboard content towards the top
+const dashboardStyle = {
+  padding: "20px",
+  marginTop: "-30px", // Move Dashboard up
+};
+  
 const linkStyle = {
   color: "green",
   textDecoration: "underline",
   fontSize: "20px", // Slightly larger text for clarity
   marginTop: "15px", // Add some space between links
 };
-
