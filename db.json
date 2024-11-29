@@ -1,1 +1,162 @@
-{}
+{
+  "shops": [
+    {
+      "id": "1",
+      "name": "Clara shop",
+      "location": "Nairobi"
+    },
+    {
+      "id": "2",
+      "name": "Liz shop",
+      "location": "Nakuru"
+    },
+    {
+      "id": "3",
+      "name": "Keno shop ",
+      "location": "Kisumu"
+    },
+    {
+      "id": "4",
+      "name": "Shel center",
+      "location": "Tanzania"
+    },
+    {
+      "id": "5",
+      "name": "Gen shop",
+      "location": "Nakuru"
+    },
+    {
+      "id": "6",
+      "name": "Main enterprice",
+      "location": "Tanzania"
+    },
+    {
+      "id": "7",
+      "name": "Rex shop",
+      "location": "Nakuru"
+    },
+    {
+      "id": "8",
+      "name": "General shop",
+      "location": "Kericho"
+    },
+    {
+      "id": "9",
+      "name": "Twin shopping",
+      "location": "Tanzania"
+    },
+    {
+      "id": "10",
+      "name": "Dinkle shop",
+      "location": "Nakuru"
+    },
+    {
+      "id": "11",
+      "name": "Sista shop",
+      "location": "Kericho"
+    },
+    {
+      "id": "3f8e",
+      "name": "Kikie"
+    },
+    {
+      "id": "4ebe",
+      "name": "Tana shop"
+    },
+    {
+      "id": "6066",
+      "name": "Maria Gen Shop",
+      "location": "Kisumu",
+      "description": "sells all wholesale products"
+    },
+    {
+      "id": "f130",
+      "name": "Kahiga shop",
+      "location": "Meru",
+      "description": "General shop"
+    },
+    {
+      "id": "f9f6",
+      "name": "Tims",
+      "location": "Nyeri"
+    },
+    {
+      "id": "1f08",
+      "name": "KIeni",
+      "location": "Nairobi"
+    },
+    {
+      "id": "0d1a",
+      "name": "Riri",
+      "location": "Nanyuki"
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "Sugar",
+      "stock": 10,
+      "category": "Category A"
+    },
+    {
+      "id": "2",
+      "name": "Maize flour",
+      "stock": 55,
+      "category": "Category B"
+    },
+    {
+      "id": "3",
+      "name": "Matchbox",
+      "stock": 100,
+      "category": "Category A"
+    },
+    {
+      "id": "4",
+      "name": "Pampers",
+      "stock": 3,
+      "category": "Category B"
+    },
+    {
+      "id": "5",
+      "name": "Sweets",
+      "stock": 70,
+      "category": "Category B"
+    },
+    {
+      "id": "6",
+      "name": "Noodles",
+      "stock": 20,
+      "category": "Category B"
+    },
+    {
+      "id": "7",
+      "name": "Biscuits",
+      "stock": 3,
+      "category": "Category B"
+    },
+    {
+      "id": "8",
+      "name": "Candles",
+      "stock": 13,
+      "category": "Category B"
+    },
+    {
+      "id": "10",
+      "name": "Wheat flour",
+      "stock": 0,
+      "category": "Category B"
+    },
+    {
+      "id": "a3db",
+      "name": "Arimis",
+      "stock": 0,
+      "category": "Beauty and Cosmetics"
+    },
+    {
+      "id": "5d5e",
+      "name": "Coconut oil",
+      "stock": 20,
+      "category": "Beauty and Cosmetics"
+    }
+  ]
+}
