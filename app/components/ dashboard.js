@@ -15,7 +15,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import ShopForm from "../components/shopForm";
 import ProductForm from "../components/productForm";
-import Modal from "../components/modal"; // Import the Modal component
+import Modal from "../components/modal";
 
 // Register the necessary components from Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -24,103 +24,70 @@ export default function Dashboard() {
   const [shops, setShops] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showShopForm, setShowShopForm] = useState(false); // Track visibility of the shop form
-  const [showProductForm, setShowProductForm] = useState(false); // Track visibility of the product form
+  const [showShopForm, setShowShopForm] = useState(false);
+  const [showProductForm, setShowProductForm] = useState(false);
 
-  // Fetch data when the component is mounted
+  // Fetch data on mount
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
     try {
-      const shopData = await getShops(); // Fetch shops
-      const productData = await getProducts(); // Fetch products
+      const shopData = await getShops();
+      const productData = await getProducts();
       setShops(shopData);
       setProducts(productData);
-      setLoading(false); // Set loading to false when data is fetched
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setLoading(false); // Set loading to false in case of error
+      setLoading(false);
     }
   };
 
-  const onShopAdded = () => {
-    fetchData(); // Refresh shop data after adding a new shop
-  };
+  const handleAddShop = () => setShowShopForm(true);
+  const handleAddProduct = () => setShowProductForm(true);
+  const handleCloseShopForm = () => setShowShopForm(false);
+  const handleCloseProductForm = () => setShowProductForm(false);
 
-  const onProductAdded = () => {
-    fetchData(); // Refresh product data after adding a new product
-  };
-
-  const handleAddShop = () => {
-    setShowShopForm(true); // Show the shop form
-  };
-
-  const handleCloseShopForm = () => {
-    setShowShopForm(false); // Close the shop form
-  };
-
-  const handleAddProduct = () => {
-    setShowProductForm(true); // Show the product form
-  };
-
-  const handleCloseProductForm = () => {
-    setShowProductForm(false); // Close the product form
-  };
-
-  // Calculating total stock
   const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
 
-  // Categorize stock status
   const stockStatus = {
     inStock: products.filter((p) => p.stock > 5).length,
     lowStock: products.filter((p) => p.stock > 0 && p.stock <= 5).length,
     outOfStock: products.filter((p) => p.stock === 0).length,
   };
 
-  // If loading, show a loading message
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div style={dashboardStyle}>
       <h1>Dashboard</h1>
 
       {/* Card Section */}
-      <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
-        {/* Total Shops Card */}
+      <div style={cardsContainerStyle}>
         <div style={cardStyle}>
           <h2>Total Shops</h2>
           <p style={cardTextStyle}>{shops.length}</p>
         </div>
-
-        {/* Total Products Card */}
         <div style={cardStyle}>
           <h2>Total Products</h2>
           <p style={cardTextStyle}>{products.length}</p>
         </div>
-
-        {/* Total Stock Card */}
         <div style={cardStyle}>
           <h2>Total Stock</h2>
           <p style={cardTextStyle}>{totalStock}</p>
         </div>
-      </div>
-
-      {/* Centered View All Card with Red Background */}
-      <div style={centeredCardStyle}>
-        <h1 style={{ marginBottom: "5px" }}>View All</h1>
-        <div>
-          <a href="/manageShops" style={linkStyle}>View All Shops</a>
+        <div style={viewAllCardStyle}>
+          <h2>View All</h2>
+          <a href="/manageShops" style={linkStyle}>Shops</a>
           <br />
-          <a href="/manageProducts" style={linkStyle}>View All Products</a>
+          <a href="/manageProducts" style={linkStyle}>Products</a>
         </div>
       </div>
 
       {/* Render the Bar Chart */}
-      <div style={{ width: "600px", height: "400px", margin: "0 auto" }}>
+      <div style={chartContainerStyle}>
         <Bar
           data={{
             labels: ["In Stock", "Low Stock", "Out of Stock"],
@@ -140,51 +107,56 @@ export default function Dashboard() {
                 display: true,
                 text: "Product Stock Status",
               },
-              tooltip: {
-                callbacks: {
-                  label: function (context) {
-                    const label = context.dataset.label || "";
-                    const value = context.raw;
-                    return `${label}: ${value} items`;
-                  },
-                },
-              },
             },
           }}
         />
       </div>
 
       {/* Add Item Buttons */}
-      <div style={{ marginTop: "20px" }}>
+      <div style={buttonsContainerStyle}>
         <button onClick={handleAddShop} style={buttonStyle}>Add Shop</button>
         <button onClick={handleAddProduct} style={buttonStyle}>Add Product</button>
       </div>
 
-      {/* Show the ShopForm modal when the button is clicked */}
+      {/* ShopForm Modal */}
       {showShopForm && (
         <Modal onClose={handleCloseShopForm}>
-          <ShopForm onShopAdded={onShopAdded} onClose={handleCloseShopForm} />
+          <ShopForm onClose={handleCloseShopForm} />
         </Modal>
       )}
 
-      {/* Show the ProductForm modal when the button is clicked */}
+      {/* ProductForm Modal */}
       {showProductForm && (
         <Modal onClose={handleCloseProductForm}>
-          <ProductForm onProductAdded={onProductAdded} onClose={handleCloseProductForm} />
+          <ProductForm onClose={handleCloseProductForm} />
         </Modal>
       )}
     </div>
   );
 }
 
-// Inline styles for the cards
+// Styles
+const dashboardStyle = {
+  padding: "20px",
+};
+
+const cardsContainerStyle = {
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "20px",
+  justifyContent: "space-between",
+  marginBottom: "20px",
+};
+
 const cardStyle = {
   backgroundColor: "blue",
   color: "white",
   padding: "20px",
   borderRadius: "8px",
   textAlign: "center",
-  flex: "1",
+  flex: "1 1 calc(25% - 20px)", // Responsive card width
+  minWidth: "200px",
+  maxWidth: "300px",
 };
 
 const cardTextStyle = {
@@ -192,42 +164,39 @@ const cardTextStyle = {
   fontWeight: "bold",
 };
 
+const viewAllCardStyle = {
+  ...cardStyle,
+  backgroundColor: "darkred",
+  color: "white",
+  padding: "15px",
+};
+
+const chartContainerStyle = {
+  width: "90%",
+  maxWidth: "1200px", // Expand on larger screens
+  height: "500px", // Larger height for better visibility
+  margin: "0 auto",
+};
+
+const buttonsContainerStyle = {
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: "center",
+  gap: "10px",
+  marginTop: "20px",
+};
+
 const buttonStyle = {
   backgroundColor: "green",
   color: "white",
   padding: "10px 20px",
-  margin: "5px",
   borderRadius: "5px",
   border: "none",
   cursor: "pointer",
 };
 
-const centeredCardStyle = {
-  backgroundColor: "red", // Red background color
-  color: "white",
-  padding: "20px 30px", // More padding for a balanced look
-  borderRadius: "8px",
-  textAlign: "center",
-  flex: "1",
-  marginTop: "20px", // Add some space between the cards
-  width: "300px", // Set a fixed width to avoid it becoming too large
-  marginLeft: "auto", // Center horizontally
-  marginRight: "auto", // Center horizontally
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-};
-
-// New style to lift the Dashboard content towards the top
-const dashboardStyle = {
-  padding: "20px",
-  marginTop: "-30px", // Move Dashboard up
-};
-  
 const linkStyle = {
-  color: "green",
+  color: "white",
   textDecoration: "underline",
-  fontSize: "20px", // Slightly larger text for clarity
-  marginTop: "15px", // Add some space between links
+  fontSize: "16px",
 };
