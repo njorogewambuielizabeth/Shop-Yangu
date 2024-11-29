@@ -7,11 +7,23 @@ import { useRouter } from "next/navigation";
 export default function ManageProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   const router = useRouter();
 
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    // Filter products based on search term
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredProducts(filtered);
+  }, [searchTerm, products]);
 
   const fetchProducts = async () => {
     try {
@@ -37,6 +49,15 @@ export default function ManageProducts() {
     router.push(`/editProducts/${id}`); // Redirect to the edit product page
   };
 
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   if (loading) {
     return (
       <div style={styles.loading}>
@@ -48,6 +69,17 @@ export default function ManageProducts() {
   return (
     <div style={styles.container}>
       <h1 style={styles.header}>Manage Products</h1>
+
+      {/* Search Input */}
+      <input
+        type="text"
+        style={styles.searchInput}
+        placeholder="Search products by name"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+
+      {/* Product Table */}
       <table style={styles.productTable}>
         <thead>
           <tr style={styles.tableHeader}>
@@ -58,7 +90,7 @@ export default function ManageProducts() {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {currentProducts.map((product) => (
             <tr key={product.id} style={styles.tableRow}>
               <td style={styles.tableData}>{product.name}</td>
               <td style={styles.tableData}>{product.price}</td>
@@ -81,6 +113,27 @@ export default function ManageProducts() {
           ))}
         </tbody>
       </table>
+
+      {/* Pagination */}
+      <div style={styles.pagination}>
+        <button
+          onClick={() => paginate(currentPage - 1)}
+          disabled={currentPage === 1}
+          style={styles.paginationBtn}
+        >
+          Previous
+        </button>
+        <span style={styles.pageNumber}>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() => paginate(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          style={styles.paginationBtn}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }
@@ -101,6 +154,14 @@ const styles = {
     color: "#333",
     marginBottom: "20px",
     fontSize: "2rem",
+  },
+  searchInput: {
+    width: "100%",
+    padding: "10px",
+    fontSize: "1rem",
+    marginBottom: "20px",
+    borderRadius: "4px",
+    border: "1px solid #ccc",
   },
   productTable: {
     width: "100%",
@@ -140,6 +201,24 @@ const styles = {
     cursor: "pointer",
     borderRadius: "4px",
     transition: "background-color 0.3s ease",
+  },
+  pagination: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "20px",
+  },
+  paginationBtn: {
+    backgroundColor: "#4CAF50",
+    color: "white",
+    padding: "8px 16px",
+    margin: "0 10px",
+    cursor: "pointer",
+    borderRadius: "4px",
+  },
+  pageNumber: {
+    fontSize: "1rem",
+    margin: "0 10px",
   },
   loading: {
     display: "flex",

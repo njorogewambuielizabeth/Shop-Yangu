@@ -7,6 +7,9 @@ import { useRouter } from "next/navigation";
 export default function ManageShops() {
   const [shops, setShops] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState(""); // State for search term
+  const [currentPage, setCurrentPage] = useState(1); // State for current page
+  const [itemsPerPage, setItemsPerPage] = useState(5); // Items per page for pagination
   const router = useRouter();
 
   useEffect(() => {
@@ -37,6 +40,32 @@ export default function ManageShops() {
     router.push(`/editShop/${id}`); // Redirect to the edit shop page
   };
 
+  // Filter shops based on the search term
+  const filteredShops = shops.filter(
+    (shop) =>
+      (shop.name && shop.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (shop.location && shop.location.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  // Paginate filtered shops
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentShops = filteredShops.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredShops.length / itemsPerPage);
+
+  // Handle search term change
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setCurrentPage(1); // Reset to the first page on search term change
+  };
+
+  // Handle pagination change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   if (loading) {
     return (
       <div style={styles.loading}>
@@ -48,6 +77,17 @@ export default function ManageShops() {
   return (
     <div style={styles.container}>
       <h1 style={styles.header}>Manage Shops</h1>
+
+      {/* Search Bar */}
+      <input
+        type="text"
+        placeholder="Search by name or location"
+        value={searchTerm}
+        onChange={handleSearchChange}
+        style={styles.searchInput}
+      />
+
+      {/* Shops Table */}
       <table style={styles.shopTable}>
         <thead>
           <tr style={styles.tableHeader}>
@@ -57,7 +97,7 @@ export default function ManageShops() {
           </tr>
         </thead>
         <tbody>
-          {shops.map((shop) => (
+          {currentShops.map((shop) => (
             <tr key={shop.id} style={styles.tableRow}>
               <td style={styles.tableData}>{shop.name}</td>
               <td style={styles.tableData}>{shop.location}</td>
@@ -79,6 +119,19 @@ export default function ManageShops() {
           ))}
         </tbody>
       </table>
+
+      {/* Pagination */}
+      <div style={styles.pagination}>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => handlePageChange(index + 1)}
+            style={currentPage === index + 1 ? styles.pageButtonActive : styles.pageButton}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
@@ -99,6 +152,14 @@ const styles = {
     color: "#333",
     marginBottom: "20px",
     fontSize: "2rem",
+  },
+  searchInput: {
+    width: "100%",
+    padding: "8px 12px",
+    marginBottom: "20px",
+    fontSize: "16px",
+    border: "1px solid #ccc",
+    borderRadius: "4px",
   },
   shopTable: {
     width: "100%",
@@ -139,6 +200,29 @@ const styles = {
     borderRadius: "4px",
     transition: "background-color 0.3s ease",
   },
+  pagination: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "20px",
+  },
+  pageButton: {
+    backgroundColor: "#f0f0f0",
+    color: "#333",
+    border: "1px solid #ccc",
+    padding: "8px 16px",
+    cursor: "pointer",
+    borderRadius: "4px",
+    margin: "0 5px",
+  },
+  pageButtonActive: {
+    backgroundColor: "#4CAF50",
+    color: "white",
+    border: "1px solid #4CAF50",
+    padding: "8px 16px",
+    cursor: "pointer",
+    borderRadius: "4px",
+    margin: "0 5px",
+  },
   loading: {
     display: "flex",
     justifyContent: "center",
@@ -148,18 +232,3 @@ const styles = {
     color: "#333",
   },
 };
-
-// Adding hover effect for buttons
-const editBtnHover = {
-  ...styles.editBtn,
-  backgroundColor: "#45a049",
-};
-
-const deleteBtnHover = {
-  ...styles.deleteBtn,
-  backgroundColor: "#e53935",
-};
-
-styles.editBtn = { ...styles.editBtn, ":hover": editBtnHover };
-styles.deleteBtn = { ...styles.deleteBtn, ":hover": deleteBtnHover };
-
