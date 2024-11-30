@@ -1,240 +1,158 @@
-import { useState, useEffect } from "react";
-import { addProduct } from "../Services/productService"; // Assuming this is the function to add a product
-import { getShops } from "../Services/shopService"; // Fetch the shops to display in the dropdown
+import { useState } from "react";
+import { addProduct } from "../Services/productService";
 
-export default function ProductForm({ onProductAdded, onClose }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    price: 0,
-    stock: 0,
-    description: "",
-    shopId: "", // Field to store the selected shop's ID
-  });
+const ProductForm = ({ onProductAdded, onClose }) => {
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [stock, setStock] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
 
-  const [shops, setShops] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  useEffect(() => {
-    const fetchShops = async () => {
-      try {
-        const shopData = await getShops(); // Fetch shops
-        setShops(shopData);
-        setLoading(false); // Set loading to false when shops are fetched
-      } catch (error) {
-        console.error("Error fetching shops:", error);
-        setLoading(false);
-      }
-    };
-    fetchShops();
-  }, []);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
     try {
-      // Send form data including the selected shopId to the backend
-      await addProduct(formData); // Assuming addProduct handles the API call
-      onProductAdded(); // Refresh the product list
-      onClose(); // Close the form after submission
+      const newProduct = {
+        name,
+        price,
+        stock,
+      };
+
+      // Call your addProduct service function
+      const addedProduct = await addProduct(newProduct);
+
+      if (addedProduct) {
+        setMessage("Product added successfully!");
+        setMessageType("success");
+
+        // Notify the parent (Dashboard) of the new product
+        if (onProductAdded) {
+          onProductAdded(addedProduct);
+        }
+
+        // Close the form after adding the product
+        onClose();
+      }
     } catch (error) {
-      console.error("Error adding product:", error);
+      console.error("Error in submission:", error);
+      setMessage(error.message || "Error adding product. Please try again.");
+      setMessageType("error");
     }
   };
 
-  if (loading) {
-    return <div>Loading shops...</div>;
-  }
-
   return (
-    <div style={formWrapperStyle}>
-      <h2 style={formTitleStyle}>Add Product</h2>
+    <div style={modalContainerStyle}>
       <form onSubmit={handleSubmit} style={formStyle}>
-        <div style={inputGroupStyle}>
-          <label style={labelStyle}>Product Name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            placeholder="Enter product name"
-            required
-            style={inputStyle}
-          />
-        </div>
+        <h2 style={formTitleStyle}>Add Product</h2>
 
-        <div style={inputGroupStyle}>
-          <label style={labelStyle}>Price</label>
-          <div style={inputGroupPriceStyle}>
-            <input
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleInputChange}
-              placeholder="Enter price"
-              required
-              style={priceInputStyle}
-            />
-            <span style={currencyStyle}>Ksh</span>
-          </div>
-        </div>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Product Name"
+          style={inputStyle}
+          required
+        />
+        <input
+          type="number"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          placeholder="Product Price"
+          style={inputStyle}
+          required
+        />
+        <input
+          type="number"
+          value={stock}
+          onChange={(e) => setStock(e.target.value)}
+          placeholder="Stock Quantity"
+          style={inputStyle}
+          required
+        />
+        <button type="submit" style={submitButtonStyle}>Add Product</button>
 
-        <div style={inputGroupStyle}>
-          <label style={labelStyle}>Stock Quantity</label>
-          <input
-            type="number"
-            name="stock"
-            value={formData.stock}
-            onChange={handleInputChange}
-            placeholder="Enter stock quantity"
-            required
-            style={inputStyle}
-          />
-        </div>
-
-        <div style={inputGroupStyle}>
-          <label style={labelStyle}>Description</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            placeholder="Enter product description"
-            required
-            style={textareaStyle}
-          />
-        </div>
-
-        <div style={inputGroupStyle}>
-          <label style={labelStyle}>Select Shop</label>
-          <select
-            name="shopId"
-            value={formData.shopId}
-            onChange={handleInputChange}
-            required
-            style={selectStyle}
-          >
-            <option value="">Select a Shop</option>
-            {shops.map((shop) => (
-              <option key={shop.id} value={shop.id}>
-                {shop.name} - {shop.location}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div style={buttonContainerStyle}>
-          <button type="submit" style={submitButtonStyle}>Add Product</button>
-          <button type="button" onClick={onClose} style={cancelButtonStyle}>Close</button>
-        </div>
+        {message && <div style={messageStyle(messageType)}>{message}</div>}
+        
+        <button type="button" onClick={onClose} style={cancelButtonStyle}>Cancel</button>
       </form>
     </div>
   );
-}
-
-// Styles
-const formWrapperStyle = {
-  padding: "20px",
-  backgroundColor: "#f9f9f9",
-  borderRadius: "8px",
-  maxWidth: "600px",
-  margin: "0 auto",
-  boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
 };
 
-const formTitleStyle = {
-  textAlign: "center",
-  color: "#333",
-  marginBottom: "20px",
+// Modal container style to center the form and give it some padding
+const modalContainerStyle = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100vh",
+  position: "fixed",
+  top: "0",
+  left: "0",
+  right: "0",
+  bottom: "0",
+  backgroundColor: "rgba(0, 0, 0, 0.5)",
+  zIndex: "999",
 };
 
+// Styling for the form container
 const formStyle = {
+  backgroundColor: "white",
+  padding: "20px",
+  borderRadius: "8px",
+  width: "100%",
+  maxWidth: "400px",
   display: "flex",
   flexDirection: "column",
+  gap: "15px",
+  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
 };
 
-const inputGroupStyle = {
-  marginBottom: "15px",
-};
-
-const labelStyle = {
-  fontSize: "16px",
-  fontWeight: "500",
-  marginBottom: "5px",
+// Title for the form
+const formTitleStyle = {
+  fontSize: "1.5rem",
+  fontWeight: "bold",
   color: "#333",
+  textAlign: "center",
 };
 
+// Styles for input fields
 const inputStyle = {
-  padding: "10px",
+  padding: "12px",
   borderRadius: "5px",
-  border: "1px solid #ddd",
-  fontSize: "16px",
-  width: "100%",
-};
-
-const priceInputStyle = {
-  padding: "10px",
-  borderRadius: "5px",
-  border: "1px solid #ddd",
-  fontSize: "16px",
-  width: "80%",
-};
-
-const inputGroupPriceStyle = {
-  display: "flex",
-  alignItems: "center",
-  width: "100%",
-};
-
-const currencyStyle = {
-  fontSize: "16px",
-  fontWeight: "500",
-  marginLeft: "10px",
-  color: "#333",
-};
-
-const textareaStyle = {
-  padding: "10px",
-  borderRadius: "5px",
-  border: "1px solid #ddd",
-  fontSize: "16px",
-  width: "100%",
-  height: "100px",
-  resize: "none",
-};
-
-const selectStyle = {
-  padding: "10px",
-  borderRadius: "5px",
-  border: "1px solid #ddd",
-  fontSize: "16px",
-  width: "100%",
-};
-
-const buttonContainerStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  marginTop: "20px",
+  border: "1px solid #ccc",
+  fontSize: "1rem",
+  outline: "none",
+  transition: "border 0.3s",
 };
 
 const submitButtonStyle = {
-  backgroundColor: "#4CAF50",
+  backgroundColor: "#28a745",
   color: "white",
-  padding: "12px 25px",
+  padding: "12px",
   borderRadius: "5px",
   border: "none",
+  fontSize: "1rem",
   cursor: "pointer",
-  fontSize: "16px",
+  transition: "background-color 0.3s",
 };
 
 const cancelButtonStyle = {
-  backgroundColor: "#f44336",
+  backgroundColor: "#dc3545",
   color: "white",
-  padding: "12px 25px",
+  padding: "12px",
   borderRadius: "5px",
   border: "none",
+  fontSize: "1rem",
   cursor: "pointer",
-  fontSize: "16px",
+  marginTop: "10px",
+  transition: "background-color 0.3s",
 };
+
+const messageStyle = (type) => ({
+  marginTop: "10px",
+  fontWeight: "bold",
+  color: type === "success" ? "green" : "red",
+  textAlign: "center",
+});
+
+export default ProductForm;

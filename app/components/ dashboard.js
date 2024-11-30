@@ -50,7 +50,17 @@ export default function Dashboard() {
   const handleCloseShopForm = () => setShowShopForm(false);
   const handleCloseProductForm = () => setShowProductForm(false);
 
-  const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
+  const handleProductAdded = (newProduct) => {
+    setProducts((prevProducts) => [...prevProducts, newProduct]);
+  };
+
+  const totalStock = products.reduce((sum, p) => {
+    const stock = Number(p.stock);
+    if (!isNaN(stock)) {
+      return sum + stock;
+    }
+    return sum;
+  }, 0);
 
   const stockStatus = {
     inStock: products.filter((p) => p.stock > 5).length,
@@ -64,7 +74,6 @@ export default function Dashboard() {
     <div style={dashboardStyle}>
       <h1>Dashboard</h1>
 
-      {/* Card Section */}
       <div style={cardsContainerStyle}>
         <div style={cardStyle}>
           <h2>Total Shops</h2>
@@ -86,7 +95,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Render the Bar Chart */}
       <div style={chartContainerStyle}>
         <Bar
           data={{
@@ -112,7 +120,6 @@ export default function Dashboard() {
         />
       </div>
 
-      {/* Add Item Buttons */}
       <div style={buttonsContainerStyle}>
         <button onClick={handleAddShop} style={buttonStyle}>Add Shop</button>
         <button onClick={handleAddProduct} style={buttonStyle}>Add Product</button>
@@ -128,7 +135,7 @@ export default function Dashboard() {
       {/* ProductForm Modal */}
       {showProductForm && (
         <Modal onClose={handleCloseProductForm}>
-          <ProductForm onClose={handleCloseProductForm} />
+          <ProductForm onProductAdded={handleProductAdded} onClose={handleCloseProductForm} />
         </Modal>
       )}
     </div>

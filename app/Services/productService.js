@@ -1,5 +1,3 @@
-// productService.js
-
 // Function to get all products
 export const getProducts = async () => {
   try {
@@ -7,7 +5,7 @@ export const getProducts = async () => {
     if (!response.ok) throw new Error("Failed to fetch products");
     return await response.json();
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching products:", error);
   }
 };
 
@@ -21,10 +19,27 @@ export const addProduct = async (productData) => {
       },
       body: JSON.stringify(productData),
     });
-    if (!response.ok) throw new Error("Failed to add product");
-    return await response.json();
+
+    if (response.status === 201) {
+      // Product added successfully
+      return await response.json();
+    } else if (response.status >= 400 && response.status < 500) {
+      // Client-side error
+      const error = await response.json();
+      console.error("Client error:", error); // Log the error message
+      return null; // Return null to indicate the error
+    } else if (response.status >= 500) {
+      // Server-side error
+      console.error("Server error:", response.status);
+      return null; // Return null for server error
+    }
+
+    // Handle other cases, unexpected responses
+    console.error("Unexpected response:", response.status);
+    return null;
   } catch (error) {
-    console.error(error);
+    console.error("Add Product Error:", error);
+    return null; // Return null on unexpected errors as well
   }
 };
 

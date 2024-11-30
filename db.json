@@ -56,10 +56,6 @@
       "location": "Kericho"
     },
     {
-      "id": "4ebe",
-      "name": "Tana shop"
-    },
-    {
       "id": "6066",
       "name": "Maria Gen Shop",
       "location": "Kisumu",
@@ -85,6 +81,16 @@
       "id": "0d1a",
       "name": "Riri",
       "location": "Nanyuki"
+    },
+    {
+      "id": "371a",
+      "name": "Tui",
+      "location": "Mombasa"
+    },
+    {
+      "id": "96ac",
+      "name": "Stacy",
+      "location": "Kisii"
     }
   ],
   "products": [
@@ -153,6 +159,140 @@
       "name": "Coconut oil",
       "stock": 20,
       "category": "Beauty and Cosmetics"
+    },
+    {
+      "id": "aa75",
+      "name": "Eden tea leaves",
+      "price": "50",
+      "stock": "300",
+      "description": "Kenya's best tea leaves",
+      "shopId": "1"
+    },
+    {
+      "id": "a1e8",
+      "name": "Rosy Tissue",
+      "price": "70",
+      "stock": "200",
+      "description": "Soft tissue",
+      "shopId": "2"
+    },
+    {
+      "id": "4415",
+      "name": "Hannan tissue",
+      "price": "100",
+      "stock": "20",
+      "description": "Best soft and soothing tissue",
+      "shopId": "3"
+    },
+    {
+      "id": "aa3f",
+      "name": "yes",
+      "price": "11",
+      "stock": "2",
+      "description": "dkdk",
+      "shopId": "1"
+    },
+    {
+      "id": "4576",
+      "name": "yes",
+      "price": "11",
+      "stock": "2",
+      "description": "dkdk",
+      "shopId": "1"
+    },
+    {
+      "id": "385b",
+      "name": "yes",
+      "price": "11",
+      "stock": "2",
+      "description": "dkdk",
+      "shopId": "1"
+    },
+    {
+      "id": "519d",
+      "name": "yes",
+      "price": "11",
+      "stock": "2",
+      "description": "dkdk",
+      "shopId": "1"
+    },
+    {
+      "id": "4c02",
+      "name": "yes",
+      "price": "11",
+      "stock": "2",
+      "description": "dkdk",
+      "shopId": "1"
+    },
+    {
+      "id": "c3e7",
+      "name": "hdh",
+      "price": "1",
+      "stock": "2",
+      "description": "dmx",
+      "shopId": "371a"
+    },
+    {
+      "id": "707c",
+      "name": "shen",
+      "price": "20",
+      "stock": "420",
+      "description": "skdc;kjcljljz",
+      "shopId": "1"
+    },
+    {
+      "id": "2f28",
+      "name": "hds",
+      "price": "30",
+      "stock": "10",
+      "description": "djdjcn",
+      "shopId": "f130"
+    },
+    {
+      "id": "877c",
+      "name": "dksk",
+      "price": "30",
+      "stock": "40",
+      "description": "dkkkf",
+      "shopId": "1f08"
+    },
+    {
+      "id": "3c6c",
+      "name": "fjfj",
+      "price": "30",
+      "stock": "500",
+      "description": "ddklkd",
+      "shopId": "7"
+    },
+    {
+      "id": "2adf",
+      "name": "fjfj",
+      "price": "30",
+      "stock": "500",
+      "description": "ddklkd",
+      "shopId": "7"
+    },
+    {
+      "id": "bb8d",
+      "name": "sjdj",
+      "price": "170",
+      "stock": "20",
+      "description": "dkkg",
+      "shopId": "6066"
+    },
+    {
+      "id": "4e07",
+      "name": "dkk",
+      "price": "20",
+      "stock": 0,
+      "description": "fkfk",
+      "shopId": "f9f6"
+    },
+    {
+      "id": "394d",
+      "name": "food",
+      "price": "400",
+      "stock": "1"
     }
   ]
 }
