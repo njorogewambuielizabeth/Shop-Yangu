@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from "react";
-import { getProducts, deleteProduct } from "../Services/productService";  // Assume these services exist
+import { getProducts, deleteProduct } from "../Services/productService"; // Assume these services exist
 import { useRouter } from "next/navigation";
 
 export default function ManageProducts() {
@@ -10,7 +10,6 @@ export default function ManageProducts() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
   const router = useRouter();
 
   useEffect(() => {
@@ -50,11 +49,11 @@ export default function ManageProducts() {
   };
 
   // Pagination logic
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const indexOfLastItem = currentPage * 5; // Assuming 5 items per page
+  const indexOfFirstItem = indexOfLastItem - 5;
   const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
 
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredProducts.length / 5); // Assuming 5 items per page
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 

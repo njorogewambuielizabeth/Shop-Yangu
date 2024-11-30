@@ -293,6 +293,12 @@
       "name": "food",
       "price": "400",
       "stock": "1"
+    },
+    {
+      "id": "035b",
+      "name": "gold",
+      "price": "30",
+      "stock": "2"
     }
   ]
 }

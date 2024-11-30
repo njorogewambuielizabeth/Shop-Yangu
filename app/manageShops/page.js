@@ -9,9 +9,9 @@ export default function ManageShops() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
   const [currentPage, setCurrentPage] = useState(1); // State for current page
-  const [itemsPerPage, setItemsPerPage] = useState(5); // Items per page for pagination
   const router = useRouter();
 
+  // Fetch the shops when the component is mounted
   useEffect(() => {
     fetchShops();
   }, []);
@@ -27,6 +27,7 @@ export default function ManageShops() {
     }
   };
 
+  // Handle deleting a shop
   const handleDeleteShop = async (id) => {
     try {
       await deleteShop(id); // Call the delete shop service
@@ -36,6 +37,7 @@ export default function ManageShops() {
     }
   };
 
+  // Handle editing a shop
   const handleEditShop = (id) => {
     router.push(`/editShop/${id}`); // Redirect to the edit shop page
   };
@@ -48,12 +50,12 @@ export default function ManageShops() {
   );
 
   // Paginate filtered shops
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const indexOfLastItem = currentPage * 5; // Hardcoded items per page (5)
+  const indexOfFirstItem = indexOfLastItem - 5;
   const currentShops = filteredShops.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Calculate total pages
-  const totalPages = Math.ceil(filteredShops.length / itemsPerPage);
+  // Calculate total pages for pagination
+  const totalPages = Math.ceil(filteredShops.length / 5); // Hardcoded items per page
 
   // Handle search term change
   const handleSearchChange = (event) => {
